@@ -8,6 +8,10 @@ use figment::{
 };
 
 /// Retrieve the application configuration by merging together multiple configuration sources.
+///
+/// # Errors
+///
+/// This function will return an error if the configuration cannot be loaded.
 pub fn load(default_profile: Option<Environment>) -> Result<Config, anyhow::Error> {
 	let env = load_env(default_profile).context("Failed to load the desired app env")?;
 
@@ -56,11 +60,12 @@ pub enum Environment {
 
 impl Environment {
 	/// Return the environment as a string.
-	pub fn as_str(&self) -> &'static str {
+	#[must_use]
+	pub const fn as_str(&self) -> &'static str {
 		match self {
-			Environment::Dev => "dev",
-			Environment::Test => "test",
-			Environment::Prod => "prod",
+			Self::Dev => "dev",
+			Self::Test => "test",
+			Self::Prod => "prod",
 		}
 	}
 }
@@ -70,9 +75,9 @@ impl FromStr for Environment {
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
 		match s.to_lowercase().as_str() {
-            "test" => Ok(Environment::Test),
-            "dev" | "development" => Ok(Environment::Dev),
-            "prod" | "production" => Ok(Environment::Prod),
+            "test" => Ok(Self::Test),
+            "dev" | "development" => Ok(Self::Dev),
+            "prod" | "production" => Ok(Self::Prod),
             s => Err(anyhow::anyhow!(
                 "`{s}` is not a valid application profile.\nValid options are: `test`, `dev`, `prod`.",
             )),

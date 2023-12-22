@@ -9,6 +9,7 @@ use pavex::{
 use crate::routes;
 
 /// The main blueprint, containing all the routes, constructors and error handlers required by our API.
+#[must_use]
 pub fn blueprint() -> Blueprint {
 	let mut bp = Blueprint::new();
 

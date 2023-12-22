@@ -36,7 +36,7 @@ async fn run(config: Config) -> anyhow::Result<()> {
 		.local_addr()
 		.context("The server TCP listener doesn't have a local socket address")?;
 
-	tracing::info!("⚡ Starting server at {address}");
+	tracing::info!("⚡ Starting server at http://{address}");
 
 	sdk::run(Server::new().listen(tcp_listener), state).await;
 

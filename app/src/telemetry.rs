@@ -11,7 +11,8 @@ use tracing::Instrument;
 /// It takes care to record key information about the request and the response.
 pub async fn logger<T>(next: Next<T>, root_span: RootSpan) -> Response
 where
-	T: IntoFuture<Output = Response>,
+	T: Send + IntoFuture<Output = Response>,
+	T::IntoFuture: Send,
 {
 	let response = next
 		.into_future()
@@ -37,7 +38,7 @@ pub struct RootSpan(tracing::Span);
 impl RootSpan {
 	/// Create a new root span for the given request.
 	///
-	/// We follow OpenTelemetry's HTTP semantic conventions as closely as
+	/// We follow `OpenTelemetry`'s HTTP semantic conventions as closely as
 	/// possible for field naming.
 	pub fn new(request_head: &RequestHead, matched_route: MatchedRouteTemplate) -> Self {
 		let user_agent = request_head
@@ -53,7 +54,7 @@ impl RootSpan {
 			user_agent.original = %user_agent,
 			http.response.status_code = tracing::field::Empty,
 			http.route = %matched_route,
-			http.target = %request_head.uri.path_and_query().map(|p| p.as_str()).unwrap_or(""),
+			http.target = %request_head.uri.path_and_query().map_or("", |p| p.as_str()),
 		);
 		Self(span)
 	}
@@ -64,11 +65,13 @@ impl RootSpan {
 	}
 
 	/// Get a reference to the underlying [`tracing::Span`].
-	pub fn inner(&self) -> &tracing::Span {
+	#[must_use]
+	pub const fn inner(&self) -> &tracing::Span {
 		&self.0
 	}
 
 	/// Deconstruct the root span into its underlying [`tracing::Span`].
+	#[must_use]
 	pub fn into_inner(self) -> tracing::Span {
 		self.0
 	}

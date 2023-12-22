@@ -9,6 +9,7 @@ pub struct Config {
 	pub server: ServerConfig,
 }
 
+#[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Clone, serde::Deserialize)]
 pub struct AppConfig {
 	/// The name of your application.
@@ -18,6 +19,7 @@ pub struct AppConfig {
 	pub log: String,
 }
 
+#[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Clone, serde::Deserialize)]
 /// Configuration for the HTTP server used to expose the application.
 pub struct ServerConfig {
@@ -31,6 +33,10 @@ pub struct ServerConfig {
 
 impl ServerConfig {
 	/// Bind a TCP listener according to the specified parameters.
+	///
+	/// # Errors
+	///
+	/// This function will return an error if the listener cannot be bound.
 	pub async fn listener(&self) -> Result<IncomingStream, std::io::Error> {
 		let addr = SocketAddr::new(self.ip, self.port);
 		IncomingStream::bind(addr).await

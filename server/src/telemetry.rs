@@ -4,6 +4,10 @@ use tracing::subscriber::set_global_default;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 
 /// Setup telemetry for the application. Should only be called once!
+///
+/// # Errors
+///
+/// This function will return an error if the telemetry cannot be set up.
 pub fn setup(config: &Config) -> Result<(), anyhow::Error> {
 	let subscriber = Registry::default()
 		.with(EnvFilter::from(config.app.log.clone()))
