@@ -813,7 +813,7 @@ checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 [[package]]
 name = "pavex"
 version = "0.1.0"
-source = "git+https://github.com/LukeMathWalker/pavex?branch=main#43f5b107765e0bd31d424a28f13f3fdfb016dcd3"
+source = "git+https://github.com/LukeMathWalker/pavex?branch=main#e18c421e0f05f61e37a138e2953b2ebe94da95d5"
 dependencies = [
  "anyhow",
  "bytes",
@@ -846,7 +846,7 @@ dependencies = [
 [[package]]
 name = "pavex_cli_client"
 version = "0.1.0"
-source = "git+https://github.com/LukeMathWalker/pavex?branch=main#43f5b107765e0bd31d424a28f13f3fdfb016dcd3"
+source = "git+https://github.com/LukeMathWalker/pavex?branch=main#e18c421e0f05f61e37a138e2953b2ebe94da95d5"
 dependencies = [
  "anyhow",
  "pavex",
@@ -855,7 +855,7 @@ dependencies = [
 [[package]]
 name = "pavex_macros"
 version = "0.1.0"
-source = "git+https://github.com/LukeMathWalker/pavex?branch=main#43f5b107765e0bd31d424a28f13f3fdfb016dcd3"
+source = "git+https://github.com/LukeMathWalker/pavex?branch=main#e18c421e0f05f61e37a138e2953b2ebe94da95d5"
 dependencies = [
  "proc-macro2",
  "quote",

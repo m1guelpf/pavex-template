@@ -4,6 +4,11 @@ use pavex::{
 		Blueprint,
 	},
 	f,
+	request::{
+		body::{BodySizeLimit, BufferedBody, JsonBody},
+		path::PathParams,
+		query::QueryParams,
+	},
 };
 
 use crate::routes;
@@ -22,43 +27,11 @@ pub fn blueprint() -> Blueprint {
 
 /// Common constructors used by all routes.
 fn register_common_constructors(bp: &mut Blueprint) {
-	// Query parameters
-	bp.constructor(
-		f!(pavex::request::query::QueryParams::extract),
-		Lifecycle::RequestScoped,
-	)
-	.error_handler(f!(
-		pavex::request::query::errors::ExtractQueryParamsError::into_response
-	));
-
-	// Route parameters
-	bp.constructor(
-		f!(pavex::request::route::RouteParams::extract),
-		Lifecycle::RequestScoped,
-	)
-	.error_handler(f!(
-		pavex::request::route::errors::ExtractRouteParamsError::into_response
-	));
-
-	// Json body
-	bp.constructor(
-		f!(pavex::request::body::JsonBody::extract),
-		Lifecycle::RequestScoped,
-	)
-	.error_handler(f!(
-		pavex::request::body::errors::ExtractJsonBodyError::into_response
-	));
-	bp.constructor(
-		f!(pavex::request::body::BufferedBody::extract),
-		Lifecycle::RequestScoped,
-	)
-	.error_handler(f!(
-		pavex::request::body::errors::ExtractBufferedBodyError::into_response
-	));
-	bp.constructor(
-		f!(<pavex::request::body::BodySizeLimit as std::default::Default>::default),
-		Lifecycle::RequestScoped,
-	);
+	JsonBody::register(bp);
+	PathParams::register(bp);
+	QueryParams::register(bp);
+	BufferedBody::register(bp);
+	BodySizeLimit::register(bp);
 }
 
 /// Add the telemetry middleware, as well as the constructors of its dependencies.
